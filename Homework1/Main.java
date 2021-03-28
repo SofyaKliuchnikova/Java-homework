@@ -1,30 +1,59 @@
-package Homework1;
+package Homework3;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] arg){
-        Cat cat = new Cat();
-        cat.setName("Snow").setJumpLength(3).setRunDistance(150);
-        Robot robot = new Robot();
-        robot.setName("0111001").setJumpLength(8).setRunDistance(1500);
-        Human human = new Human();
-        human.setName("Boris").setJumpLength(3).setRunDistance(600);
+    public static void main(String[] args) {
+        String[] stringArr = new String[] {"first", "second", "third", "fourth", "fifth"};
+        changeArrElements(stringArr, 2, 4);
 
-        Wall wall1 = new Wall(2);
-        Wall wall2 = new Wall(1);
-        Road road1 = new Road(100);
-        Road road2 = new Road(180);
+        System.out.println();
 
-        Object[] team =  new Object[]{robot, human, cat};
-        Object[] course = new Object[]{road1, wall1, road2, wall2};
+        Apple apple1 = new Apple();
+        Apple apple2 = new Apple();
+        Orange orange1 = new Orange();
+        Orange orange2 = new Orange();
 
-        for (int i = 0; i > team.length; i++){
-            for (int j = 0; j > course.length; j++){
-                if (team[i].isMember = true) {    
-                    course[j].check(team[i]);
-                } else break;
-            }
-        }
+        ArrayList appleList = new ArrayList();
+        Box appleBox = new Box(appleList);
 
+        ArrayList orangeList = new ArrayList();
+        Box orangeBox = new Box(orangeList);
+
+        appleBox.addFruit(apple1);
+        appleBox.addFruit(apple2);
+
+        orangeBox.addFruit(orange1);
+        orangeBox.addFruit(orange2);
+
+        System.out.println("Вес коробки с яблоками " + appleBox.getWeight());
+        System.out.println("Вес коробки с апельсинами " + orangeBox.getWeight());
+
+        System.out.println("Сравним вес коробок:  " + orangeBox.compare(appleBox));
+
+        ArrayList appleList2 = new ArrayList();
+        Box appleBox2 = new Box(appleList2);
+        Apple apple3 = new Apple();
+        appleBox2.addFruit(apple3);
+        System.out.println();
+        System.out.println("Вес второй коробки с яблоками " + appleBox2.getWeight());
+
+        appleBox2.pourOver(appleBox);
+        System.out.println("Пересыпем яблоки в одну коробку и снова сравним: " + orangeBox.compare(appleBox));
+        System.out.println("Вес первой коробки с яблоками " + appleBox.getWeight());
+        System.out.println("Вес второй коробки с яблоками " + appleBox2.getWeight());
 
     }
+
+    public static void changeArrElements(Object[] array, int a, int b) {
+        System.out.println(Arrays.toString(array));
+        Object tmp = array[a];
+        array[a] = array[b];
+        array[b] = tmp;
+        System.out.println("Меняем местами элементы " + a + " и " + b);
+        System.out.println(Arrays.toString(array));
+    }
+
+
 }
