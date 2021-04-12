@@ -18,8 +18,11 @@ public class DataBaseRepository {
     }
 
     public boolean saveWeatherData(DailyForecastModelForDB dailyForecastModelForDB) throws SQLException {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:geekbrains.db")){  // проверить где закрывается коннекшн
-            PreparedStatement saveDailyForecast = connection.prepareStatement(insert_db);
+        Connection connection = null;
+        PreparedStatement saveDailyForecast = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:geekbrains.db");
+            saveDailyForecast = connection.prepareStatement(insert_db);
             saveDailyForecast.setString(1, dailyForecastModelForDB.getCity());
             saveDailyForecast.setString(2, dailyForecastModelForDB.getLocalDate());
             saveDailyForecast.setDouble(3, dailyForecastModelForDB.getTempMin());
@@ -29,14 +32,19 @@ public class DataBaseRepository {
             return saveDailyForecast.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            saveDailyForecast.close();
+            connection.close();
         }
         throw new SQLException("Сохранение прогноза в базу данных не выполнено!");
     }
 
-    public void getHistoryFromDB (){
+    public void getHistoryFromDB () throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
         try {
-            Connection connection = DriverManager.getConnection("jdbc:sqlite:geekbrains.db"); // проверить где закрывается коннекшн
-            Statement statement = connection.createStatement();
+            connection = DriverManager.getConnection("jdbc:sqlite:geekbrains.db");
+            statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from dailyForecasts");
             while (resultSet.next()){
                 int id = resultSet.getInt(1);
@@ -48,8 +56,13 @@ public class DataBaseRepository {
                 String textNight = resultSet.getString(7);
                 System.out.printf("%s. %s %s %.1f %.1f %s. %s. \n", id, city, localDate, tempMin, tempMax, textDay, textNight);
             }
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            statement.close();
+            connection.close();
         }
     }
+
 }
